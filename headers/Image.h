@@ -12,9 +12,7 @@ private:
     int max_col;
     bool saved; // does the saved colour data match the data at save_filepath
     bool loaded; //is there colour data to read
-    std::vector<int> red;
-    std::vector<int> green;
-    std::vector<int> blue;
+    std::vector<std::vector<int>> data;
 
 public:
     Image(std::string filepath, bool load);
@@ -31,8 +29,7 @@ public:
 
     void set_save_filepath(std::string filepath);
     void set_channels(std::vector<std::vector<int>> channels);
-    void set_red_channel(std::vector<int> channel);
-    void set_green_channel(std::vector<int> channel);
-    void set_blue_channel(std::vector<int> channel);
+    void set_channel(int channel, std::vector<int> value);
 };
+
 #endif

@@ -15,7 +15,7 @@ int main()
     for(int i = 0; i < length; i++){
         channel.push_back(0);
     }
-    im1.set_red_channel(channel);
+    im1.set_channel(0, channel);
     im1.save_image();
     return 0;
 }

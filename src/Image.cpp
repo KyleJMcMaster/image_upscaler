@@ -1,6 +1,4 @@
 #include "../headers/Image.h"
-#include <string>
-#include <vector>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -14,9 +12,8 @@
     int max_col;
     bool saved; // does the saved colour data match the data at save_filepath
     bool loaded; //is there colour data to read
-    std::vector<int> red;
-    std::vector<int> green;
-    std::vector<int> blue;
+    std::vector<std::vector<int>> data;
+
 
 
 
@@ -35,9 +32,7 @@
             max_col = 0;
             saved = true;
             loaded = false;
-            red = {};
-            green = {};
-            blue = {};
+            data = {{},{},{}};
         }
     }
 
@@ -56,9 +51,7 @@
             max_col = 0;
             saved = true;
             loaded = false;
-            red = {};
-            green = {};
-            blue = {};
+            data = {{},{},{}};
         }
     }
 
@@ -98,9 +91,9 @@
             greenstream >> g;
             bluestream >> b;
 
-            red.push_back(r);
-            green.push_back(g);
-            blue.push_back(b);
+            data[0].push_back(r);
+            data[1].push_back(g);
+            data[2].push_back(b);
         }
         image.close();
         saved = true;
@@ -111,9 +104,9 @@
         size_x = size_x;
         size_y = size_y;
         max_col = max_col;
-        red = red;
-        green = green;
-        blue = blue;
+        data[0] = *red;
+        data[1] = *green;
+        data[2] = *blue;
 
         saved = false;
         loaded = true;
@@ -128,9 +121,9 @@
         image << max_col << "\n";
 
         for(int i = 0; i < size_x * size_y; i ++){
-            image << red[i] << " ";
-            image << green[i] << " ";
-            image << blue[i] << " ";
+            image << data[0][i] << " ";
+            image << data[1][i] << " ";
+            image << data[2][i] << " ";
         }
         image.close();
         saved = true;
@@ -141,8 +134,7 @@
     int Image::get_max_col(){return max_col;}
     std::vector<std::vector<int>> Image::get_channels()
     {
-        std::vector<std::vector<int>> channels = {red, green, blue};
-        return channels;
+        return data;
     }
     std::vector<int> Image::get_size()
     {
@@ -157,20 +149,13 @@
     }
     void Image::set_channels(std::vector<std::vector<int>> channels)
     {
-        red = channels[0];
-        green = channels[1];
-        blue = channels[2];
+        data[0] = channels[0];
+        data[1] = channels[1];
+        data[2] = channels[2];
         saved = false;
     }
-    void Image::set_red_channel(std::vector<int> channel)
+    void Image::set_channel(int channel, std::vector<int> value)
     {
-        red = channel;
+        data[channel] = value;
     }
-    void Image::set_green_channel(std::vector<int> channel)
-    {
-        green = channel;
-    }
-    void Image::set_blue_channel(std::vector<int> channel)
-    {
-        blue = channel;
-    }
+    
