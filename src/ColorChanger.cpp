@@ -17,4 +17,5 @@ void ColorChanger::shift_color(Image* img, int channel, int shift_amount){
         int x = value[i]+shift_amount;
         value[i] = (x>=max_col)*max_col + (x<max_col)*x; //limit to max_col without conditional
     }
+    img->set_channel(channel, value);
 }
