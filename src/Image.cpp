@@ -101,13 +101,13 @@
         loaded = true;
     }
 
-    void Image::load_image_from_channels(int size_x, int size_y, int max_col, std::vector<int>* red, std::vector<int>* green, std::vector<int>* blue){
+    void Image::load_image_from_channels(int size_x, int size_y, int max_col, std::vector<int> &red, std::vector<int> &green, std::vector<int> &blue){
         size_x = size_x;
         size_y = size_y;
         max_col = max_col;
-        data[0] = *red;
-        data[1] = *green;
-        data[2] = *blue;
+        data[0] = red;
+        data[1] = green;
+        data[2] = blue;
 
         saved = false;
         loaded = true;
@@ -133,9 +133,9 @@
     bool Image::is_loaded(){return loaded;}
     bool Image::is_saved(){return saved;}
     int Image::get_max_col(){return max_col;}
-    std::vector<std::vector<int>> Image::get_channels()
+    std::vector<std::vector<int>> * Image::get_channels()
     {
-        return data;
+        return &data;
     }
     std::vector<int> Image::get_size()
     {
@@ -148,14 +148,14 @@
         save_filepath = filepath;
         saved = false;
     }
-    void Image::set_channels(std::vector<std::vector<int>> channels)
+    void Image::set_channels(std::vector<std::vector<int>> &channels)
     {
         data[0] = channels[0];
         data[1] = channels[1];
         data[2] = channels[2];
         saved = false;
     }
-    void Image::set_channel(int channel, std::vector<int> value)
+    void Image::set_channel(int channel, std::vector<int> &value)
     {
         data[channel] = value;
     }
