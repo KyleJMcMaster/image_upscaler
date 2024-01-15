@@ -4,14 +4,12 @@
 #include "../headers/ColorChanger.h"
 #include <vector>
 
-class ColorChanger: public ColorChanger {
+class CUDAColorChanger: public ColorChanger {
 
 public:
     static void set_color(Image* img, int channel, std::vector<int> new_value);
-    static void shift_color(Image* img, int channel, int shift_amount);
-
-private:
-    __global__ static void shift(int size, std::vector<int> channel, int shift_amount);
+    void shift_color(Image* img, int channel, int shift_amount);
+    __global__ void shift(int size, int max_col, int* channel, int shift_amount);
 };
 
 #endif
