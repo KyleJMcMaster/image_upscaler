@@ -96,6 +96,7 @@
             data[1].push_back(g);
             data[2].push_back(b);
         }
+        std::cout << size_x*size_y << " pixels loaded                  \n";
         image.close();
         saved = true;
         loaded = true;
