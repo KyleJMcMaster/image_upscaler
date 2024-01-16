@@ -1,0 +1,2 @@
+https://www.fftw.org/
+https://docs.nvidia.com/cuda/cuda-c-programming-guide/contents.html

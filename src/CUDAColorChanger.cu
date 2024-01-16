@@ -22,7 +22,7 @@ void CUDAColorChanger::shift_color(Image* img, int channel, int shift_amount){
     }
 
     int blockSize = 256;
-    int numBlocks = 2;
+    int numBlocks = 10;
 
 
     shift<<<numBlocks, blockSize>>>(size, max_col, output, shift_amount);
