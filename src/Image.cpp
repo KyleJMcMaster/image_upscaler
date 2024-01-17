@@ -13,6 +13,12 @@
     bool saved; // does the saved colour data match the data at save_filepath
     bool loaded; //is there colour data to read
     std::vector<std::vector<int>> data;
+    bool fft_loaded;//has a plan been created?
+    bool transformed;//has a transform been performed?
+    double *fft_data;
+    fftw_plan fft_plan;
+    fftw_plan ifft_plan;
+
 
 
 
@@ -20,21 +26,23 @@
     Image::Image(std::string filepath, bool load = false){
         load_filepath = filepath;
         save_filepath = filepath;
+
         if (load)
         {
             data = {{},{},{}};
             load_image_from_file();
             loaded = true;
-            saved = true;
         }else
         {
             size_x = 0;
             size_y = 0;
             max_col = 0;
-            saved = true;
             loaded = false;
             data = {{},{},{}};
         }
+        saved = true;
+        fft_loaded=false;
+        transformed=false;
     }
 
     Image::Image (std::string load_fp, std::string save_fp, bool load = false){
@@ -42,18 +50,20 @@
         save_filepath = save_fp;
         if (load)
         {
+            data = {{},{},{}};
             load_image_from_file();
             loaded = true;
-            saved = true;
         }else
         {
             size_x = 0;
             size_y = 0;
             max_col = 0;
-            saved = true;
             loaded = false;
             data = {{},{},{}};
         }
+        saved = true;
+        fft_loaded=false;
+        transformed=false;
     }
 
 
@@ -100,6 +110,8 @@
         image.close();
         saved = true;
         loaded = true;
+        fft_loaded=false;
+        transformed=false;
     }
 
     void Image::load_image_from_channels(int size_x, int size_y, int max_col, std::vector<int> &red, std::vector<int> &green, std::vector<int> &blue){
@@ -112,6 +124,8 @@
 
         saved = false;
         loaded = true;
+        fft_loaded=false;
+        transformed=false;
     }
 
     void Image::save_image(){
@@ -160,4 +174,18 @@
     {
         data[channel] = value;
     }
-    
+
+    void Image::load_fft(bool quick_load = false)
+    {
+        fftw_complex *cfft_data;
+        fft_data = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
+        cfft_data = (fftw_complex*) &fft_data;
+        if (quick_load){
+            fft_plan = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data, cfft_data, FFTW_ESTIMATE)
+            ifft_plan = fftw_plan_dft_c2r_2d(size_y, size_x, fft_data, cfft_data, FFTW_ESTIMATE)
+
+        }
+    }
+    void Image::transform();
+    void Image::inv_transform();
+    void Image::destroy_fft();

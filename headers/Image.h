@@ -14,6 +14,11 @@ private:
     bool saved; // does the saved colour data match the data at save_filepath
     bool loaded; //is there colour data to read
     std::vector<std::vector<int>> data;
+    bool fft_loaded;//has a plan been created?
+    bool transformed;//has a transform been performed?
+    double *fft_data;
+    fftw_plan fft_plan;
+    fftw_plan ifft_plan;
 
 public:
     Image(std::string filepath, bool load);
@@ -31,6 +36,11 @@ public:
     void set_save_filepath(std::string filepath);
     void set_channels(std::vector<std::vector<int>> &channels);
     void set_channel(int channel, std::vector<int> &value);
-};
 
+    void load_fft(bool quick_load);
+    void transform();
+    void inv_transform();
+    void destroy_fft();
+};
+--Make sure to make new channel for each colour!!
 #endif
