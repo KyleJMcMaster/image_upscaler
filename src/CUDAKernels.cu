@@ -1,4 +1,4 @@
-#include "../headers/CUDAKernals.cuh"
+#include "../headers/CUDAKernels.cuh"
 #include <iostream>
 
 __global__ void shift(int size, int max_col, int *output, int shift_amount){

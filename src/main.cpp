@@ -1,6 +1,6 @@
 #include "../headers/Image.h"
 #include "../headers/ColorChanger.h"
-#include "../headers/CUDAColorChanger.h"
+#include "../headers/CUDAColorChanger.cuh"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,5 +11,5 @@ int main()
     im1.set_save_filepath("resources/dog_water_red.ppm");
     CUDAColorChanger::shift_color(&im1, 0, 125);
     im1.save_image();
-    return 0;
+    return 1;
 }

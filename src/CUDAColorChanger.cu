@@ -1,5 +1,5 @@
-#include "../headers/CUDAColorChanger.h"
-#include "../headers/CUDAKernals.cuh"
+#include "../headers/CUDAColorChanger.cuh"
+#include "../headers/CUDAKernels.cuh"
 #include <iostream>
 
 void CUDAColorChanger::shift_color(Image* img, int channel, int shift_amount){
