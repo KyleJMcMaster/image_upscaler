@@ -2,6 +2,7 @@
 #define IMAGE_H
 #include <string>
 #include <vector>
+#include <fftw3.h>
 class Image
 {
 private:
