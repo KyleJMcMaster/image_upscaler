@@ -1,3 +1,6 @@
 https://www.fftw.org/
 https://docs.nvidia.com/cuda/cuda-c-programming-guide/contents.html
 https://developer.download.nvidia.com/video/gputechconf/gtc/2019/presentation/s9444-build-systems-exploring-modern-cmake-cuda-v2.pdf
+https://github.com/jonathanschilling/fftw_tutorial/blob/master/src/test_2d_c2r.c
+https://www.fftw.org/fftw2_doc/fftw_2.html
+https://www.fftw.org/fftw3_doc/Multi_002dDimensional-DFTs-of-Real-Data.html
