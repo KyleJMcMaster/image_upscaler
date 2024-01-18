@@ -15,9 +15,14 @@
     std::vector<std::vector<int>> data;
     bool fft_loaded;//has a plan been created?
     bool transformed;//has a transform been performed?
-    double *fft_data;
-    fftw_plan fft_plan;
-    fftw_plan ifft_plan;
+    double *fft_data_red;
+    double *fft_data_green;
+    double *fft_data_blue;
+    fftw_complex *cfft_data_red;
+    fftw_complex *cfft_data_green;
+    fftw_complex *cfft_data_blue;
+    fftw_plan *fft_plan;
+    fftw_plan *ifft_plan;
 
 
 
@@ -177,9 +182,27 @@
 
     void Image::load_fft(bool quick_load = false)
     {
-        fftw_complex *cfft_data;
-        fft_data = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
-        cfft_data = (fftw_complex*) &fft_data;
+        //if loaded, destroy_fft();
+
+        //allocate for in-place transform
+        fft_data_red = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
+        cfft_data_red = (fftw_complex*) &fft_data_red;
+
+        fft_data_green = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
+        cfft_data_green  = (fftw_complex*) &fft_data_green ;
+
+        fft_data_blue = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
+        cfft_data_blue = (fftw_complex*) &fft_data_blue;
+
+        //load data to 2d array
+        for(int i = 0; i < size_y; i++){
+            for(int j = 0; j < size_x; j++){
+                fft_data_red[i][j] = data[0][i*size_y+j];
+                fft_data_green[i][j] = data[1][i*size_y+j];
+                fft_data_blue[i][j] = data[2][i*size_y+j];
+            }
+        }
+
         if (quick_load){
             fft_plan = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data, cfft_data, FFTW_ESTIMATE)
             ifft_plan = fftw_plan_dft_c2r_2d(size_y, size_x, fft_data, cfft_data, FFTW_ESTIMATE)

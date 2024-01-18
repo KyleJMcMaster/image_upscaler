@@ -16,9 +16,14 @@ private:
     std::vector<std::vector<int>> data;
     bool fft_loaded;//has a plan been created?
     bool transformed;//has a transform been performed?
-    double *fft_data;
-    fftw_plan fft_plan;
-    fftw_plan ifft_plan;
+    double *fft_data_red;
+    double *fft_data_green;
+    double *fft_data_blue;
+    fftw_complex *cfft_data_red;
+    fftw_complex *cfft_data_green;
+    fftw_complex *cfft_data_blue;
+    fftw_plan *fft_plan;
+    fftw_plan *ifft_plan;
 
 public:
     Image(std::string filepath, bool load);
