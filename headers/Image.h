@@ -22,8 +22,13 @@ private:
     fftw_complex *cfft_data_red;
     fftw_complex *cfft_data_green;
     fftw_complex *cfft_data_blue;
-    fftw_plan *fft_plan;
-    fftw_plan *ifft_plan;
+    fftw_plan fft_plan_red;
+    fftw_plan fft_plan_green;
+    fftw_plan fft_plan_blue;
+    fftw_plan ifft_plan_red;
+    fftw_plan ifft_plan_green;
+    fftw_plan ifft_plan_blue;
+    
 
 public:
     Image(std::string filepath, bool load);
@@ -46,6 +51,7 @@ public:
     void transform();
     void inv_transform();
     void destroy_fft();
+    //add fcn to reload image from transformed data
 };
---Make sure to make new channel for each colour!!
+
 #endif
