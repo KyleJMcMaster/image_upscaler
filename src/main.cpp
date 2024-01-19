@@ -9,7 +9,7 @@ int main()
 {
     Image im1("resources/dog_water.ppm", true);
     im1.set_save_filepath("resources/dog_water_red.ppm");
-    CUDAColorChanger::shift_color(&im1, 0, 125);
+    CUDAColorChanger::shift_color(&im1, 1, 125);
     std::cout<<"shifted\n";
     im1.load_fft(false);
     std::cout<<"loaded\n";

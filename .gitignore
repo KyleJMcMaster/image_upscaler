@@ -1,0 +1,4 @@
+img_up
+build/*.o
+resources/dog_water_red_diagonal_line_err.ppm
+resources/dog_water_red.ppm
