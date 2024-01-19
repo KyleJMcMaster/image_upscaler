@@ -16,7 +16,7 @@
         std::vector<int> dimensions = {size_x, size_y};
         return dimensions;
     }
-    void Kernel::pad_size(int target_size_x, int target_size_y){
+    void Kernel::pad_kernel(int target_size_x, int target_size_y){
         std::vector<double> new_data(target_size_x*target_size_y);
         for(int i = 0; i < target_size_x*target_size_y; i++){
             if(i%target_size_x >= size_x || i/target_size_x >= size_y){
@@ -25,9 +25,13 @@
                 new_data[i] = data[i%target_size_x + i/target_size_x*size_x];
             }
         }
-        data = new_data;
-        size_x = target_size_x;
-        size_y = target_size_y;
+        padded_data = new_data;
+        padded_size_x = target_size_x;
+        padded_size_y = target_size_y;
+        padded = true;
+        if(fft_loaded){
+            destroy_fft();
+        }
     }
     std::vector<double> * Kernel::get_data(){
         return &data;
@@ -36,16 +40,20 @@
         return cfft_data;
     }
     void Kernel::load_fft(){
+        if(!padded){
+            std::cout<<"kernel not padded... aborting load_fft()";
+            return;
+        }
         if(fft_loaded){
             destroy_fft();
         }
-        fft_data = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
+        fft_data = fftw_alloc_real(padded_size_y * 2 * (padded_size_x/2 + 1));
         cfft_data = (fftw_complex*) &fft_data[0];
 
-        fft_plan = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data, cfft_data, FFTW_ESTIMATE);
+        fft_plan = fftw_plan_dft_r2c_2d(padded_size_y, padded_size_x, fft_data, cfft_data, FFTW_ESTIMATE);
 
-        for(int i = 0; i < size_y*size_x; i++){
-            fft_data[i] = data[i];
+        for(int i = 0; i < padded_size_y*padded_size_x; i++){
+            fft_data[i] = padded_data[i];
         }
         fft_loaded = true;
     }
@@ -67,4 +75,22 @@
         }
         fftw_execute(fft_plan);
         transformed = true;
+    }
+    void Kernel::convolve(int size_x, int size_y, fftw_complex * img_data){
+        if(!padded){
+            pad_kernel(size_x, size_y);
+        }
+        if(size_x != padded_size_x || size_y != padded_size_y){
+            pad_kernel(size_x, size_y);
+        }
+        if(!fft_loaded){
+            load_fft();
+        }
+        if(!transformed){
+            transform();
+        }
+        for(int i = 0; i < size_x*size_y; i+=2){
+            img_data[i] = img_data[i] * cfft_data[i];
+        }
+
     }

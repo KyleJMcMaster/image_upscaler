@@ -11,7 +11,7 @@ int main()
     
     std::vector<double> k1_data = {0.1, 0.2, 0.3, 0.4};
     Kernel k1 = Kernel(2,2,k1_data,false);
-    k1.pad_size(4,3);
+    k1.pad_kernel(4,3);
     std::vector<double> k1_padded_data = *(k1.get_data());
     for(int i =0; i<12;i++){
         std::cout<<k1_padded_data[i]<<" ";
@@ -29,11 +29,10 @@ int main()
     std::cout<<"loaded\n";
 
 
-
-
-
     im1.transform();
     std::cout<<"transformed\n";
+
+
     im1.inv_transform();
     std::cout<<"inv_transformed\n";
     im1.save_fft();
