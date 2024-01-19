@@ -48,9 +48,11 @@ public:
     void set_channel(int channel, std::vector<int> &value);
 
     void load_fft(bool quick_load);
+    void save_fft();
     void transform();
     void inv_transform();
     void destroy_fft();
+    
     //add fcn to reload image from transformed data
 };
 

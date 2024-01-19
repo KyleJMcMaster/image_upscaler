@@ -184,7 +184,7 @@
         data[channel] = value;
     }
 
-    void Image::load_fft(bool quick_load = false)
+    void Image::load_fft(bool quick_load)
     {
         if(fft_loaded){
             destroy_fft();
@@ -192,16 +192,18 @@
 
         //allocate for in-place transform
         fft_data_red = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
-        cfft_data_red = (fftw_complex*) &fft_data_red;
+        cfft_data_red = (fftw_complex*) &fft_data_red[0];
+        
 
         fft_data_green = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
-        cfft_data_green  = (fftw_complex*) &fft_data_green ;
+        cfft_data_green  = (fftw_complex*) &fft_data_green[0];
 
         fft_data_blue = fftw_alloc_real(size_y * 2 * (size_x/2 + 1));
-        cfft_data_blue = (fftw_complex*) &fft_data_blue;
+        cfft_data_blue = (fftw_complex*) &fft_data_blue[0];
+
+        std::cout<<"allocated \n";
 
         
-        //make plans
         if (quick_load){
             fft_plan_red = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data_red, cfft_data_red, FFTW_ESTIMATE);
             ifft_plan_red = fftw_plan_dft_c2r_2d(size_y, size_x, cfft_data_red, fft_data_red, FFTW_ESTIMATE);
@@ -212,39 +214,58 @@
             fft_plan_blue = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data_blue, cfft_data_blue, FFTW_ESTIMATE);
             ifft_plan_blue = fftw_plan_dft_c2r_2d(size_y, size_x, cfft_data_blue, fft_data_blue, FFTW_ESTIMATE);
         } else{
+            std::cout<<"start plans \n";
             fft_plan_red = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data_red, cfft_data_red, FFTW_MEASURE);
+            std::cout<<"forward\n";
             ifft_plan_red = fftw_plan_dft_c2r_2d(size_y, size_x, cfft_data_red, fft_data_red, FFTW_MEASURE);
-
+            std::cout<<"reverse\n";
             fft_plan_green = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data_green, cfft_data_green, FFTW_MEASURE);
             ifft_plan_green = fftw_plan_dft_c2r_2d(size_y, size_x, cfft_data_green, fft_data_green,  FFTW_MEASURE);
 
             fft_plan_blue = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data_blue, cfft_data_blue, FFTW_MEASURE);
             ifft_plan_blue = fftw_plan_dft_c2r_2d(size_y, size_x, cfft_data_blue, fft_data_blue, FFTW_MEASURE);
         }
+        std::cout<<"plan developed\n";
 
         //load data to 2d array
-        for(int i = 0; i < size_y; i++){
-            for(int j = 0; j < size_x; j++){
-                fft_data_red[i][j] = data[0][i*size_y+j];
-                fft_data_green[i][j] = data[1][i*size_y+j];
-                fft_data_blue[i][j] = data[2][i*size_y+j];
-            }
+        for(int i = 0; i < size_y*size_x; i++){
+            fft_data_red[i] = (double) data[0][i];
+            fft_data_green[i] = (double) data[1][i];
+            fft_data_blue[i] = (double) data[2][i];
         }
+        std::cout<<"copied\n";
         fft_loaded = true;
     }
+    //copy data from fft_data back to pixel format
+    void Image::save_fft(){
+        if(!fft_loaded){
+            return;
+        }
+        int fft_index = 0;
+        for(int i = 0; i < size_y * size_x; i++){
+            if(fft_index%size_x == 1){
+                fft_index++;
+            }
+            data[0][fft_index] = fft_data_red[i] /(size_y * size_x);
+            data[1][fft_index] = fft_data_green[i] /(size_y * size_x);
+            data[2][fft_index] = fft_data_blue[i] /(size_y * size_x);
+        }
+    }
     void Image::transform(){
-        if(!transformed)
-        fftw_execute(fft_plan_red);
-        fftw_execute(fft_plan_green);
-        fftw_execute(fft_plan_blue);
-        transformed = true;
+        if(!transformed){
+            fftw_execute(fft_plan_red);
+            fftw_execute(fft_plan_green);
+            fftw_execute(fft_plan_blue);
+            transformed = true;
+        }
     }
     void Image::inv_transform(){
-        if(transformed)
-        fftw_execute(ifft_plan_red);
-        fftw_execute(ifft_plan_green);
-        fftw_execute(ifft_plan_blue);
-        transformed = false;
+        if(transformed){
+            fftw_execute(ifft_plan_red);
+            fftw_execute(ifft_plan_green);
+            fftw_execute(ifft_plan_blue);
+            transformed = false;
+        }
     }
     void Image::destroy_fft(){
         if(!fft_loaded){
