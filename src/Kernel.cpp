@@ -1,10 +1,11 @@
 #include "../headers/Kernel.h"
+#include <iostream>
 
 
-    Kernel::Kernel(int size_x, int size_y, std::vector<int> value, bool do_load_fft){
+    Kernel::Kernel(int size_x, int size_y, std::vector<double> value, bool do_load_fft){
         data = value;
-        size_x = size_x;
-        size_y = size_y;
+        this->size_x = size_x;
+        this->size_y = size_y;
         if(do_load_fft){
             load_fft();
         }
@@ -16,7 +17,7 @@
         return dimensions;
     }
     void Kernel::pad_size(int target_size_x, int target_size_y){
-        std::vector<int> new_data(target_size_x*target_size_y);
+        std::vector<double> new_data(target_size_x*target_size_y);
         for(int i = 0; i < target_size_x*target_size_y; i++){
             if(i%target_size_x >= size_x || i/target_size_x >= size_y){
                 new_data[i] = 0;
@@ -28,7 +29,7 @@
         size_x = target_size_x;
         size_y = target_size_y;
     }
-    std::vector<int> * Kernel::get_data(){
+    std::vector<double> * Kernel::get_data(){
         return &data;
     }
     fftw_complex * Kernel::get_cfft_result(){
@@ -44,7 +45,7 @@
         fft_plan = fftw_plan_dft_r2c_2d(size_y, size_x, fft_data, cfft_data, FFTW_ESTIMATE);
 
         for(int i = 0; i < size_y*size_x; i++){
-            fft_data[i] = (double) data[i];
+            fft_data[i] = data[i];
         }
         fft_loaded = true;
     }

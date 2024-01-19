@@ -9,7 +9,7 @@ class Kernel
 private:
     int size_x;
     int size_y;
-    std::vector<int> data;
+    std::vector<double> data;
     bool fft_loaded;//has a plan been created?
     bool transformed;//has a transform been performed?
     double *fft_data;
@@ -17,12 +17,12 @@ private:
     fftw_plan fft_plan;
 
 public:
-    Kernel(int size_x, int size_y, std::vector<int> value, bool load_fft);
+    Kernel(int size_x, int size_y, std::vector<double> value, bool load_fft);
     bool is_fft_loaded();
     bool is_transformed();
     std::vector<int> get_size();
     void pad_size(int size_x, int size_y);
-    std::vector<int> * get_data();
+    std::vector<double> * get_data();
     fftw_complex * get_cfft_result();
     void load_fft();
     void destroy_fft();
