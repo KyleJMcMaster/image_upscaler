@@ -1,4 +1,4 @@
-OBJECTS = build/main.o build/Image.o build/ColorChanger.o build/CUDAColorChanger.o build/CUDAKernels.o
+OBJECTS = build/main.o build/Image.o build/ColorChanger.o build/CUDAColorChanger.o build/CUDAKernels.o build/Kernel.o
 
 all: $(OBJECTS)
 	nvcc $(OBJECTS) -o img_up -lfftw3

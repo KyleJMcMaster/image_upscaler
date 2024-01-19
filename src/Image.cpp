@@ -4,34 +4,6 @@
 #include <iostream>
 
 
-
-    std::string load_filepath;
-    std::string save_filepath;
-    int size_x;
-    int size_y;
-    int max_col;
-    bool saved; // does the saved colour data match the data at save_filepath
-    bool loaded; //is there colour data to read
-    std::vector<std::vector<int>> data;
-    bool fft_loaded;//has a plan been created?
-    bool transformed;//has a transform been performed?
-    double *fft_data_red;
-    double *fft_data_green;
-    double *fft_data_blue;
-    fftw_complex *cfft_data_red;
-    fftw_complex *cfft_data_green;
-    fftw_complex *cfft_data_blue;
-    fftw_plan fft_plan_red;
-    fftw_plan fft_plan_green;
-    fftw_plan fft_plan_blue;
-    fftw_plan ifft_plan_red;
-    fftw_plan ifft_plan_green;
-    fftw_plan ifft_plan_blue;
-
-
-
-
-
     Image::Image(std::string filepath, bool load = false){
         load_filepath = filepath;
         save_filepath = filepath;
@@ -252,20 +224,30 @@
         }
     }
     void Image::transform(){
-        if(!transformed){
+        if(!fft_loaded){
+            return;
+        }
+        if(transformed){
+            return;
+        }
             fftw_execute(fft_plan_red);
             fftw_execute(fft_plan_green);
             fftw_execute(fft_plan_blue);
             transformed = true;
-        }
+        
     }
     void Image::inv_transform(){
-        if(transformed){
+        if(!fft_loaded){
+            return;
+        }
+        if(!transformed){
+            return;
+        }
             fftw_execute(ifft_plan_red);
             fftw_execute(ifft_plan_green);
             fftw_execute(ifft_plan_blue);
             transformed = false;
-        }
+        
     }
     void Image::destroy_fft(){
         if(!fft_loaded){
@@ -285,4 +267,22 @@
 
         fft_loaded = false;
         transformed = false;
+    }
+    bool Image::is_fft_loaded(){
+        return fft_loaded;
+    }
+    bool Image::is_transformed(){
+        return transformed;
+    }
+    fftw_complex * Image::get_cfft_result(int channel){
+        if(!transformed){
+            return NULL;
+        }
+        if(channel==0){
+            return cfft_data_red;
+        }else if(channel==1){
+            return cfft_data_green;
+        }
+        return cfft_data_blue;
+        
     }

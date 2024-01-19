@@ -1,6 +1,7 @@
 #include "../headers/Image.h"
 #include "../headers/ColorChanger.h"
 #include "../headers/CUDAColorChanger.cuh"
+#include "../headers/Kernel.h"
 #include <iostream>
 #include <string>
 #include <vector>
