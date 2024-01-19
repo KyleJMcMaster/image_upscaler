@@ -89,8 +89,20 @@
         if(!transformed){
             transform();
         }
-        for(int i = 0; i < size_x*size_y; i+=2){
-            img_data[i] = img_data[i] * cfft_data[i];
+        double tmp;
+        for(int i = 0; i < 100; i++){
+            std::cout<<img_data[i][0]<<", "<<img_data[i][1]<<"\n";
         }
+        std::cout<<"input---------\n";
+        for(int i = 0; i < size_y*(size_x/2+1); i++){
+            
+            tmp = img_data[i][0] * cfft_data[i][0] - img_data[i][1] * cfft_data[i][1];
+            img_data[i][1] = img_data[i][0] * cfft_data[i][1] + img_data[i][1] * cfft_data[i][0];
+            img_data[i][0] = tmp;
+        }
+        for(int i = 0; i < 100; i++){
+            std::cout<<img_data[i][0]<<", "<<img_data[i][1]<<"\n";
+        }
+        std::cout<<"output---------\n";
 
     }

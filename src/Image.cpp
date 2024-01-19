@@ -218,9 +218,9 @@
             if(fft_index%size_x == 1){
                 fft_index++;
             }
-            data[0][fft_index] = fft_data_red[i] /(size_y * size_x);
-            data[1][fft_index] = fft_data_green[i] /(size_y * size_x);
-            data[2][fft_index] = fft_data_blue[i] /(size_y * size_x);
+            data[0][fft_index] = (int)(fft_data_red[i] /(size_y * size_x));
+            data[1][fft_index] = (int)(fft_data_green[i] /(size_y * size_x));
+            data[2][fft_index] = (int)(fft_data_blue[i] /(size_y * size_x));
         }
     }
     void Image::transform(){
