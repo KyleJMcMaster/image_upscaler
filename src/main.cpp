@@ -48,8 +48,11 @@ int main()
 
     std::vector<int> red = (*(im1.get_channels()))[0];
 
-    for(int i = 0; i < 100; i++){
-            std::cout<<red[i]<<"\n";
+    for(int i = 0; i < 200000; i++){
+        if(red[i] == 0){
+            std::cout<<i<<"\n";
+        }
+            
         }
     im1.destroy_fft();
     std::cout<<"plan destroyed\n";
