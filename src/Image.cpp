@@ -218,9 +218,9 @@
             if(fft_index%size_x == 1){
                 fft_index++;
             }
-            data[0][fft_index] = (int)(fft_data_red[i] /(size_y * size_x));
-            data[1][fft_index] = (int)(fft_data_green[i] /(size_y * size_x));
-            data[2][fft_index] = (int)(fft_data_blue[i] /(size_y * size_x));
+            data[0][i] = (int)(fft_data_red[fft_index] /(size_y * size_x));
+            data[1][i] = (int)(fft_data_green[fft_index] /(size_y * size_x));
+            data[2][i] = (int)(fft_data_blue[fft_index] /(size_y * size_x));
         }
     }
     void Image::transform(){
@@ -285,4 +285,7 @@
         }
         return cfft_data_blue;
         
+    }
+    double * Image::get_inv_transform_result(){
+        return fft_data_red;
     }

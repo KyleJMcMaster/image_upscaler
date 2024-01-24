@@ -77,9 +77,7 @@
         transformed = true;
     }
     void Kernel::convolve(int size_x, int size_y, fftw_complex * img_data){
-        if(!padded){
-            pad_kernel(size_x, size_y);
-        }
+        
         if(size_x != padded_size_x || size_y != padded_size_y){
             pad_kernel(size_x, size_y);
         }
@@ -90,19 +88,11 @@
             transform();
         }
         double tmp;
-        for(int i = 0; i < 100; i++){
-            std::cout<<img_data[i][0]<<", "<<img_data[i][1]<<"\n";
-        }
-        std::cout<<"input---------\n";
+        
         for(int i = 0; i < size_y*(size_x/2+1); i++){
-            
             tmp = img_data[i][0] * cfft_data[i][0] - img_data[i][1] * cfft_data[i][1];
             img_data[i][1] = img_data[i][0] * cfft_data[i][1] + img_data[i][1] * cfft_data[i][0];
             img_data[i][0] = tmp;
         }
-        for(int i = 0; i < 100; i++){
-            std::cout<<img_data[i][0]<<", "<<img_data[i][1]<<"\n";
-        }
-        std::cout<<"output---------\n";
 
     }

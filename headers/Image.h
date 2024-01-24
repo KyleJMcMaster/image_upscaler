@@ -55,6 +55,7 @@ public:
     bool is_fft_loaded();
     bool is_transformed();
     fftw_complex * get_cfft_result(int channel);
+    double * get_inv_transform_result();
     
     //add fcn to reload image from transformed data
 };

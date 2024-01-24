@@ -8,10 +8,10 @@
 
 int main()
 {
-    int size = 100;
+    int size = 9;
     std::vector<double> k1_data(size*size);
     for(int i = 0; i<size*size; i++){
-        k1_data[i] = size;
+        k1_data[i] = 0.0123;
     }
     Kernel k1 = Kernel(size,size,k1_data,false);
 
@@ -37,8 +37,20 @@ int main()
 
     im1.inv_transform();
     std::cout<<"inv_transformed\n";
+
+    double * img_data1 = im1.get_inv_transform_result();
+    for(int i = 0; i < 100; i++){
+            std::cout<<img_data1[i]/200000<<"\n";
+        }
+
     im1.save_fft();
     std::cout<<"saved\n";
+
+    std::vector<int> red = (*(im1.get_channels()))[0];
+
+    for(int i = 0; i < 100; i++){
+            std::cout<<red[i]<<"\n";
+        }
     im1.destroy_fft();
     std::cout<<"plan destroyed\n";
     im1.save_image();
