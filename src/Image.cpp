@@ -215,12 +215,13 @@
         }
         int fft_index = 0;
         for(int i = 0; i < size_y * size_x; i++){
-            if(fft_index%size_x == 1){
-                fft_index++;
+            if(i%(size_x) != 0 && i%(size_x) != 1){
+                data[0][fft_index] = (int)(fft_data_red[i] /(size_y * size_x));
+                data[1][fft_index] = (int)(fft_data_green[i] /(size_y * size_x));
+                data[2][fft_index] = (int)(fft_data_blue[i] /(size_y * size_x));
             }
-            data[0][i] = (int)(fft_data_red[fft_index] /(size_y * size_x));
-            data[1][i] = (int)(fft_data_green[fft_index] /(size_y * size_x));
-            data[2][i] = (int)(fft_data_blue[fft_index] /(size_y * size_x));
+            
+            fft_index++;
         }
     }
     void Image::transform(){

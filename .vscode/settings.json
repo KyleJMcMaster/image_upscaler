@@ -60,7 +60,11 @@
         "stop_token": "cpp",
         "thread": "cpp",
         "__nullptr": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.configureOnOpen": true
