@@ -11,7 +11,7 @@ int main()
     int size = 9;
     std::vector<double> k1_data(size*size);
     for(int i = 0; i<size*size; i++){
-        k1_data[i] = 0.0123;
+        k1_data[i] = 1.0/(size*size);
     }
     Kernel k1 = Kernel(size,size,k1_data,false);
 

@@ -215,7 +215,7 @@
         }
         int fft_index = 0;
         for(int i = 0; i < size_y * size_x; i++){
-            if(i%(size_x) != 0 && i%(size_x) != 1){
+            if(i%(size_x) != 0){
                 data[0][fft_index] = (int)(fft_data_red[i] /(size_y * size_x));
                 data[1][fft_index] = (int)(fft_data_green[i] /(size_y * size_x));
                 data[2][fft_index] = (int)(fft_data_blue[i] /(size_y * size_x));
